@@ -3,7 +3,7 @@
 % EE/CPE 428 - Computer Vision
 % Winter 2023
 %
-% Group <#>: Chris Miglio, Eitan Klass, Nathan Jaggers
+% Group 4: Chris Miglio, Eitan Klass, Nathan Jaggers
 %
 % Description: See coresponding document
 %% Part A
@@ -12,12 +12,10 @@
 im1 = imread("Sunflower.png")
 imshow(im1)
 
+%%
 % convert to grayscale
 imgray = rgb2gray(im1)
-% there is an extra stray column in the sunflower image
-% for some reason here we are getting rid of it
-% imgray = imgray(:,2:801)
-% imshow(imgray)
+imshow(imgray)
 
 %%
 % max and min values with coordinates
@@ -37,8 +35,11 @@ class(imgray)
 bytes = rows*cols
 
 imshow(imgray)
+%%
+imagename = 'grayflower.png'
+imwrite(imgray,imagename)
 
-fileinfo = dir('graygroupreduced.jpeg')
+fileinfo = dir(imagename)
 filesize = fileinfo(1).bytes
 
 %%
@@ -62,21 +63,45 @@ bytes = rows*cols
 small = smaller;
 
 %%
-% Eitans Reduce
-% Reduced quality of image
-reduced = imgray(1:20:end, 1:20:end);
-figure;
-imshow(reduced);
+imagename = 'grayflowerreduced.png'
+imwrite(small,imagename)
+
+fileinfo = dir(imagename)
+filesize = fileinfo(1).bytes
 
 %% Part B
 
 imbacteria = imread("bacteria.bmp")
 imshow(imbacteria)
 
+%%
 threshold = 100
 imthresh = imbacteria<threshold
 imshow(imthresh)
 
+% Compute the total area
+area = bwarea(imthresh)
+disp(area)
+
+%%
 imlabled = bwlabel(imthresh)
 max(max(imlabled))
-imshow(imlabled,[0,21])
+imshow(imlabled,[])
+
+%%
+%find the center of bacteria and print number there
+stats = regionprops(imthresh,'Centroid')
+centers = stats.Centroid
+imshow(imthresh)
+hold on
+for x = 1: numel(stats)
+    text(stats(x).Centroid(1),stats(x).Centroid(2), num2str(x), ...
+        'Color',[1 0 0], 'FontWeight','bold','HorizontalAlignment','center')
+end 
+
+hold off
+%%
+% Get the area of each bacterium
+for i = 1 : max(imlabled(:))
+   area = bwarea(imlabled == i)
+end

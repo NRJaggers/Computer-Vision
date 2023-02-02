@@ -9,10 +9,12 @@
 % Cannot use imfilter, can use fspecial
 %% Part A
 close all
+clear
+clc
 
 %%
 % filter boat
-figure(1)
+figure("Name","Boat Comparison")
 boat = imread("Boat2.tif")
 subplot(3,4,1)
 imshow(boat)
@@ -91,7 +93,7 @@ title('Min 5x5')
 
 %%
 % filter building
-figure(2)
+figure("Name","Building Comparison")
 bldg = imread("building.gif")
 subplot(3,4,1)
 imshow(bldg)

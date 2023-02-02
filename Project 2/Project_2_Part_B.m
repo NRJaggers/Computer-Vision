@@ -79,9 +79,9 @@ imshow(gray)
 
 %%
 % LoG kernel
-s1 = fspecial("log",5,0.5)
-s2 = fspecial("log",5,1.0)
-s3 = fspecial("log",5,1.2)
+s1 = fspecial("log",5,0.5);
+s2 = fspecial("log",5,1.0);
+s3 = fspecial("log",5,1.2);
 
 %%
 %filter image

@@ -81,14 +81,14 @@ hold off
 %%
 % improved method
 % white pieces
-peaks = match_template(gray,white,0.66);
+peaks = match_template(gray,white,0.65);
 
 [w_ypeak, w_xpeak] = find(peaks>=1);
 w_yoffSet = w_ypeak-size(white,1);
 w_xoffSet = w_xpeak-size(white,2);
 
 % black pieces
-peaks = match_template(gray,black,0.64);
+peaks = match_template(gray,black,0.63);
 
 [b_ypeak, b_xpeak] = find(peaks>=1);
 b_yoffSet = b_ypeak-size(black,1);
@@ -101,6 +101,8 @@ for i = 1:size(w_xoffSet)
 rectangle('Position', ...
     [w_xoffSet(i)+1, w_yoffSet(i)+1, size(white,2), size(white,1)], ...
     'EdgeColor','r');
+end
+for i = 1:size(b_xoffSet)
 rectangle('Position', ...
     [b_xoffSet(i)+1, b_yoffSet(i)+1, size(black,2), size(black,1)], ...
     'EdgeColor','b');

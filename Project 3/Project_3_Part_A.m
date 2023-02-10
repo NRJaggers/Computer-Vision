@@ -77,3 +77,32 @@ rectangle('Position', ...
     'EdgeColor','b');
 end
 hold off
+
+%%
+% improved method
+% white pieces
+peaks = match_template(gray,white,0.66);
+
+[w_ypeak, w_xpeak] = find(peaks>=1);
+w_yoffSet = w_ypeak-size(white,1);
+w_xoffSet = w_xpeak-size(white,2);
+
+% black pieces
+peaks = match_template(gray,black,0.64);
+
+[b_ypeak, b_xpeak] = find(peaks>=1);
+b_yoffSet = b_ypeak-size(black,1);
+b_xoffSet = b_xpeak-size(black,2);
+
+figure();
+hold on;
+imshow(bg);
+for i = 1:size(w_xoffSet)
+rectangle('Position', ...
+    [w_xoffSet(i)+1, w_yoffSet(i)+1, size(white,2), size(white,1)], ...
+    'EdgeColor','r');
+rectangle('Position', ...
+    [b_xoffSet(i)+1, b_yoffSet(i)+1, size(black,2), size(black,1)], ...
+    'EdgeColor','b');
+end
+hold off

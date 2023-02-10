@@ -56,69 +56,53 @@ subplot(1,3,3);
 imshow(template_scissors);
 
 %%
-nc_rock = normxcorr2(template_rock,gray_rock);
-nc_paper = normxcorr2(template_paper,gray_paper);
-nc_scissors = normxcorr2(template_scissors,gray_scissors);
-
-figure(4)
-subplot(1,3,1);
-imshow(nc_rock,[]);
-subplot(1,3,2);
-imshow(nc_paper,[]);
-subplot(1,3,3);
-imshow(nc_scissors,[]);
-
-%%
-thresh = 0.9;
-r_thresh = thresh*max(nc_rock(:));
-p_thresh = thresh*max(nc_paper(:));
-s_thresh = thresh*max(nc_scissors(:));
-
-[r_ypeak, r_xpeak] = find(nc_rock>=r_thresh);
-[p_ypeak, p_xpeak] = find(nc_paper>=p_thresh);
-[s_ypeak, s_xpeak] = find(nc_scissors>=s_thresh);
-
-r_yoffSet = r_ypeak-size(template_rock,1);
-r_xoffSet = r_xpeak-size(template_rock,2);
-
-p_yoffSet = p_ypeak-size(template_paper,1);
-p_xoffSet = p_xpeak-size(template_paper,2);
-
-s_yoffSet = s_ypeak-size(template_scissors,1);
-s_xoffSet = s_xpeak-size(template_scissors,2);
-
+peak = match_template(gray_rock, template_rock, 0.75);
+[ypeak, xpeak] = find(peak>=1);
+yoffSet = ypeak-size(template_rock,1);
+xoffSet = xpeak-size(template_rock,2);
 %%
 %display rock image and boxes
-figure(5);
+figure();
 hold on;
 imshow(rock);
-for i = 1:size(r_xoffSet)
+for i = 1:size(xoffSet)
 rectangle('Position', ...
-    [r_xoffSet(i)+1, r_yoffSet(i)+1, size(template_rock,2), size(template_rock,1)], ...
+    [xoffSet(i)+1, yoffSet(i)+1, size(template_rock,2), size(template_rock,1)], ...
     'EdgeColor','r');
 end
 hold off
 
+%%
+peak = match_template(gray_paper, template_paper, 0.85);
+[ypeak, xpeak] = find(peak>=1);
+yoffSet = ypeak-size(template_paper,1);
+xoffSet = xpeak-size(template_paper,2);
 %%
 %display rock paper and boxes
-figure(6);
+figure();
 hold on;
 imshow(paper);
-for i = 1:size(p_xoffSet)
+for i = 1:size(xoffSet)
 rectangle('Position', ...
-    [p_xoffSet(i)+1, p_yoffSet(i)+1, size(template_paper,2), size(template_paper,1)], ...
+    [xoffSet(i)+1, yoffSet(i)+1, size(template_paper,2), size(template_paper,1)], ...
     'EdgeColor','r');
 end
 hold off
 
 %%
+peak = match_template(gray_scissors, template_scissors, 0.86);
+[ypeak, xpeak] = find(peak>=1);
+yoffSet = ypeak-size(template_scissors,1);
+xoffSet = xpeak-size(template_scissors,2);
+%%
 %display rock scissors and boxes
-figure(7);
+figure();
 hold on;
 imshow(scissors);
-for i = 1:size(s_xoffSet)
+for i = 1:size(xoffSet)
 rectangle('Position', ...
-    [s_xoffSet(i)+1, s_yoffSet(i)+1, size(template_scissors,2), size(template_scissors,1)], ...
+    [xoffSet(i)+1, yoffSet(i)+1, size(template_scissors,2), size(template_scissors,1)], ...
     'EdgeColor','r');
 end
 hold off
+

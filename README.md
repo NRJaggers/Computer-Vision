@@ -6,4 +6,6 @@ Project 1: Get familiar with Matlab and image processing toolbox. Apply grayscal
 
 Project 2: Filtering noise out of images using various linear and nonlinear filters. Edge detection in images using several methods and using the hough filter to find lines in an image.
 
-Project 3:
+Project 3: Using normalized correlation and templates to perfor template matching and find recurring segments/objects of interest in images.
+
+Project 4:

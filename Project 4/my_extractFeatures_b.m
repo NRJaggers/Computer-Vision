@@ -25,6 +25,15 @@ L = strongPoints.Location;
 y = uint32(L(:, 1));
 x = uint32(L(:, 2));
 
+% Notes:
+% can do sobel/prewit on whole image before loop and generate Gx & Gy
+% then use Gx Gy with locations of key points to make descriptors
+% can use built in functions to help get gradient info 
+% (imgradient and imgradientxy)
+
+% prepare Gx and Gy gradients of original image
+[Gx, Gy] = imgradientxy(gray);
+
 extracted_features = [];
 for i = 1 : detected_pts
     % make start and stop coord for 16x16 cell?
@@ -36,15 +45,23 @@ for i = 1 : detected_pts
         
 
         % loop through rows
-        for row = 1 : row <= 4
+        for row = row_start : row <= 4
 
             % loop through columns
-            for col = 1 : col <= 4
+            for col = col_start : col <= 4
+                %get pixel and neighbors (3x3 matrix)
+                M = gray(col-1:col+1, row-1:row+1);
 
+                % compute gradient magnitude and direction 
+                % (and suppress weak edges)
+                % use prewit or sobel
+                Gx = sum(M.*Sx,"all");
+                Gy = sum(M.*Sy,"all");
 
-            % compute gradient magnitude and direction (and suppress weak edges)
+                G = abs(Gx) + abs(Gy);
+                theta = atan(Gy/Gx);
 
-            % accumulate results in bin 
+                % accumulate results in bin 
             
             end
         end

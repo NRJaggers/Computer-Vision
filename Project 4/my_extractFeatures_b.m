@@ -34,45 +34,37 @@ x = uint32(L(:, 2));
 % prepare Gx and Gy gradients of original image
 [Gx, Gy] = imgradientxy(gray);
 
-extracted_features = [];
-for i = 1 : detected_pts
-    % make start and stop coord for 16x16 cell?
-    start = [x(i)-7 y(i)-7];
-    stop = [x(i)+8 y(i)+8];
+extracted_features = {};
+for i = 1 : detected_pts  
+    % pull out 16x16 from Gx and Gy
+    subGx = Gx(x(i)-7:x(i)+8, y(i)-7:y(i)+8);
+    subGy = Gy(x(i)-7:x(i)+8, y(i)-7:y(i)+8);
 
-    % loop through cells
-    for cell = 0 : cell < 16
-        
+    % compute gradient magnitude and direction
+    [subG, theta] = imgradient(subGx, subGx);
 
-        % loop through rows
-        for row = row_start : row <= 4
+    % iterate through cells, rows and columns and sort results in bins
+    descriptor = [];
+    for cell_row = 0:3
+        for cell_col = 0:3
+            cellMag = subG((cell_row*4)+1:(cell_row*4)+4,(cell_col*4)+1:(cell_col*4)+4);
+            celltheta = theta((cell_row*4)+1:(cell_row*4)+4,(cell_col*4)+1:(cell_col*4)+4);
+            hist = zeros(8,1);
+            for row = 1:4
+                for col = 1:4
+                    % converting from -180-180 to 0-360
+                    celltheta(row,col)= celltheta(row,col) + 180; 
+                    % base bin number of of data, div by 45 gives 8
+                    % directions
+                    bin = fix(celltheta(row,col)/45)+1;
 
-            % loop through columns
-            for col = col_start : col <= 4
-                %get pixel and neighbors (3x3 matrix)
-                M = gray(col-1:col+1, row-1:row+1);
-
-                % compute gradient magnitude and direction 
-                % (and suppress weak edges)
-                % use prewit or sobel
-                Gx = sum(M.*Sx,"all");
-                Gy = sum(M.*Sy,"all");
-
-                G = abs(Gx) + abs(Gy);
-                theta = atan(Gy/Gx);
-
-                % accumulate results in bin 
-            
+                    %store results in vector
+                    hist(bin) = hist(bin) + cellMag(row,col);
+                end
             end
+            descriptor = cat(2,descriptor, hist);
+
         end
-
-    % when finished with a cell, concat to results for keypoint?
-
-    % increment cell start position
-    start 
-    
     end
-
-    % concat all key points?
-    
+    extracted_features{i}=descriptor;
 end

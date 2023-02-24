@@ -5,7 +5,7 @@ function [output, matchingLocation1, matchingLocation2] = feature_matching(keypo
     matchingLocation1 = [];
     matchingLocation2 = [];
     for i=1:size(keypoints1,2) % keypoints of image 1
-        match = 2000; % threshold
+        match = 3000; % threshold
         bestLocation1 = [-1 -1];
         bestLocation2 = [-1 -1];
         for j=1:size(keypoints2,2)  % keypoints of image 2
@@ -13,7 +13,7 @@ function [output, matchingLocation1, matchingLocation2] = feature_matching(keypo
             if distance < match
                 match = distance;
                 bestLocation1 = locations1(i,:);
-                bestLocation2 = locations1(j,:);
+                bestLocation2 = locations2(j,:);
 
             end
         end

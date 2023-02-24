@@ -16,13 +16,13 @@ clc;
 bikes1 = imread("bikes1.ppm");
 
 % create feature vector with 5x5 neighboring pixels as descriptor
-[features_a1, locs1] = my_extractFeatures_a(bikes1, 100);
+[features_a1, locs1] = my_extractFeatures_a(bikes1, 10);
 
 % load image and extract its key points
 bikes2 = imread("bikes2.ppm");
 
 % create feature vector with 5x5 neighboring pixels as descriptor
-[features_a2, locs2] = my_extractFeatures_a(bikes2, 100);
+[features_a2, locs2] = my_extractFeatures_a(bikes2, 10);
 
 [output, mloc1, mloc2] = feature_matching(features_a1,features_a2,locs1,locs2);
 
@@ -41,7 +41,7 @@ bikes2 = imread("bikes2.ppm");
 % create feature vector with SIFT
 [features_b2, locs2] = my_extractFeatures_b(bikes2, 100);
 
-[output, mloc1, mloc2] = feature_matching(features_a1,features_a2,locs1,locs2);
+[output, mloc1, mloc2] = feature_matching(features_b1,features_b2,locs1,locs2);
 
 showMatchedFeatures(bikes1,bikes2,mloc1,mloc2);
 

@@ -19,5 +19,4 @@ bikes1 = imread("bikes1.ppm");
 features_a = my_extractFeatures_a(bikes1, 10);
 
 % create feature vector with SIFT like descriptor
-%features_b = my_extractFeatures_b(bikes1, 10);
-
+features_b = my_extractFeatures_b(bikes1, 100);

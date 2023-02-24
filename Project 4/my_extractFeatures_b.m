@@ -1,4 +1,4 @@
-function extracted_features = my_extractFeatures_a(image, detected_pts)
+function [feature, Locations] = my_extractFeatures_a(image, detected_pts)
 %  Function that extracts the feature vector from the detected keypoints
 %  
 % detected points are how many points you want detected in the image
@@ -21,9 +21,9 @@ keypoints = detectSURFFeatures(gray);
 strongPoints = keypoints.selectStrongest(detected_pts);
 
 % grab locations for strongets pixels
-L = strongPoints.Location;
-y = uint32(L(:, 1));
-x = uint32(L(:, 2));
+Locations = strongPoints.Location;
+y = uint32(Locations(:, 1));
+x = uint32(Locations(:, 2));
 
 % Notes:
 % can do sobel/prewit on whole image before loop and generate Gx & Gy
@@ -35,6 +35,7 @@ x = uint32(L(:, 2));
 [Gx, Gy] = imgradientxy(gray);
 
 extracted_features = {};
+feature = [];
 for i = 1 : detected_pts  
     % pull out 16x16 from Gx and Gy
     subGx = Gx(x(i)-7:x(i)+8, y(i)-7:y(i)+8);
@@ -67,4 +68,5 @@ for i = 1 : detected_pts
         end
     end
     extracted_features{i}=descriptor;
+    feature = [feature descriptor(:)];
 end

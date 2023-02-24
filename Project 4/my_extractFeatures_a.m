@@ -1,4 +1,4 @@
-function extracted_features = my_extractFeatures_a(image, detected_pts)
+function [extracted_features, Locations] = my_extractFeatures_a(image, detected_pts)
 %  Function that extracts the feature vector from the detected keypoints
 %  
 % detected points are how many points you want detected in the image
@@ -21,9 +21,9 @@ keypoints = detectSURFFeatures(gray);
 strongPoints = keypoints.selectStrongest(detected_pts);
 
 % grab locations for strongets pixels
-L = strongPoints.Location;
-y = uint32(L(:, 1));
-x = uint32(L(:, 2));
+Locations = strongPoints.Location;
+y = uint32(Locations(:, 1));
+x = uint32(Locations(:, 2));
 
 extracted_features = [];
 for i = 1 : detected_pts

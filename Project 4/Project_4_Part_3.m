@@ -16,18 +16,42 @@ clc;
 bikes1 = imread("bikes1.ppm");
 
 % create feature vector with 5x5 neighboring pixels as descriptor
-features_a = my_extractFeatures_a(bikes1, 10);
+[features_a1, locs1] = my_extractFeatures_a(bikes1, 100);
 
-% create feature vector with SIFT like descriptor
-features_b = my_extractFeatures_b(bikes1, 100);
+% load image and extract its key points
+bikes2 = imread("bikes2.ppm");
+
+% create feature vector with 5x5 neighboring pixels as descriptor
+[features_a2, locs2] = my_extractFeatures_a(bikes2, 100);
+
+[output, mloc1, mloc2] = feature_matching(features_a1,features_a2,locs1,locs2);
+
+showMatchedFeatures(bikes1,bikes2,mloc1,mloc2);
+
+%%
+% load image and extract its key points
+bikes1 = imread("bikes1.ppm");
+
+% create feature vector with SIFT
+[features_b1, locs1] = my_extractFeatures_b(bikes1, 100);
+
+% load image and extract its key points
+bikes2 = imread("bikes2.ppm");
+
+% create feature vector with SIFT
+[features_b2, locs2] = my_extractFeatures_b(bikes2, 100);
+
+[output, mloc1, mloc2] = feature_matching(features_a1,features_a2,locs1,locs2);
+
+showMatchedFeatures(bikes1,bikes2,mloc1,mloc2);
 
 %%
 % The following is code from (I believe) Jeffrey
 % example of what final is supposed to look like
-im1 = imread('cars1.ppm');
+im1 = imread('bikes1.ppm');
 I1 = rgb2gray(im1);
 imshow(I1)
-im2 = imread('cars2.ppm');
+im2 = imread('bikes2.ppm');
 I2 = rgb2gray(im2);
 imshow(I2)
 

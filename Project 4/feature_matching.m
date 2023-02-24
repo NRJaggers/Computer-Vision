@@ -1,21 +1,26 @@
-function [output] = feature_matching(cell1, cell2)
-    % compare the 100 keypoints of two images
-    % inputs are cell vectors of length 100 containing the
-    % feature descriptors
-    points = zeros(1,100)
-    for i=1:100 % keypoints of image 1
-        match = 1000; % threshold
-        for j=1:100  % keypoints of image 2
-            distance = feature_distance(cell1{i}, cell2{j});
-            if distance < match;
+function [output, matchingLocation1, matchingLocation2] = feature_matching(keypoints1, keypoints2, locations1, locations2)
+    % compare the keypoints of two images
+    % inputs are keypoint vectors from two images
+    points = [];
+    matchingLocation1 = [];
+    matchingLocation2 = [];
+    for i=1:size(keypoints1,2) % keypoints of image 1
+        match = 2000; % threshold
+        bestLocation1 = [-1 -1];
+        bestLocation2 = [-1 -1];
+        for j=1:size(keypoints2,2)  % keypoints of image 2
+            distance = feature_distance(keypoints1(:,i), keypoints2(:,j));
+            if distance < match
                 match = distance;
-                points(i) = j;
-                % if index value is left a 0,
-                % then no good match was found
-            end              
+                bestLocation1 = locations1(i,:);
+                bestLocation2 = locations1(j,:);
+
+            end
         end
+        points = [points match];
+        matchingLocation1 = [matchingLocation1;bestLocation1];
+        matchingLocation2 = [matchingLocation2;bestLocation2];
+
     end
-    % index corresponds to location on image 1
-    % stored value corresponds to location on image 2
     output = points;
 end

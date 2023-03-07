@@ -69,22 +69,29 @@ end
 % non strawberry pixels for R, G and B
 
 % store results of separating pixels by color and strawberry-ness
-rgb_s = cell(3,1);
-rgb_b = cell(3,1);
+rgb_s = cell(3,1); rgb_b = cell(3,1);
+hsv_s = cell(3,1); hsv_b = cell(3,1);
 
-% loop through channels to isolate r, g and b values
-for color = 1:3
+% loop through channels to isolate rgb or hsv values
+for channel = 1:3
     % loop through each image and mask. pull out strawberry and background
     % pixels
     for i = 1:length(im)
-        c = (im{i}(:,:,color));
+        color = (im{i}(:,:,channel));
+        alt = rgb2hsv(im{i});
+        vector = alt(:,:,channel);
         % store strawberry and background pixels in different vectors
-        c_s = c(masks{1} == 1);
-        c_b = c(masks{1} == 0);
+        c_s = double(color(masks{1} == 1));
+        c_b = double(color(masks{1} == 0));
 
+        v_s = double(vector(masks{1} == 1));
+        v_b = double(vector(masks{1} == 0));
         %concatonate information from single image to total dataset
-        rgb_s{color} = [rgb_s{color}; c_s];
-        rgb_b{color} = [rgb_b{color}; c_b];
+        rgb_s{channel} = [rgb_s{channel}; c_s];
+        rgb_b{channel} = [rgb_b{channel}; c_b];
+        
+        hsv_s{channel} = [hsv_s{channel}; v_s];
+        hsv_b{channel} = [hsv_b{channel}; v_b];
 
     end 
 end
@@ -95,7 +102,7 @@ figure('Name','Red');
 histogram(rgb_s{1});
 hold on;
 histogram(rgb_b{1});
-title('Red Value Histogram');
+title('Red Histogram');
 legend('Strawberry','Background');
 hold off
 
@@ -103,7 +110,7 @@ figure('Name','Green');
 histogram(rgb_s{2});
 hold on;
 histogram(rgb_b{2});
-title('Green Value Histogram');
+title('Green Histogram');
 legend('Strawberry','Background');
 hold off
 
@@ -111,9 +118,99 @@ figure('Name','Blue');
 histogram(rgb_s{3});
 hold on;
 histogram(rgb_b{3});
-title('Blue Value Histogram');
+title('Blue Histogram');
 legend('Strawberry','Background');
 hold off
 
 %%
+% now create histograms for normalized rgb
+n_rgb_s = cell(3,1);
+n_rgb_b = cell(3,1);
 
+n_rgb_s{1} = rgb_s{1}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
+n_rgb_s{2} = rgb_s{2}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
+n_rgb_s{3} = rgb_s{3}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
+
+n_rgb_b{1} = rgb_b{1}./(rgb_b{1} + rgb_b{2} + rgb_b{3});
+n_rgb_b{2} = rgb_b{2}./(rgb_b{1} + rgb_b{2} + rgb_b{3});
+n_rgb_b{3} = rgb_b{3}./(rgb_b{1} + rgb_b{2} + rgb_b{3});
+
+%%
+% create histograms for normalized RGB
+figure('Name','Norm Red');
+histogram(n_rgb_s{1});
+hold on;
+histogram(n_rgb_b{1});
+title('Normalized Red Histogram');
+legend('Strawberry','Background');
+hold off
+
+figure('Name','Norm Green');
+histogram(n_rgb_s{2});
+hold on;
+histogram(n_rgb_b{2});
+title('Normalized Green Histogram');
+legend('Strawberry','Background');
+hold off
+
+figure('Name','Norm Blue');
+histogram(n_rgb_s{3});
+hold on;
+histogram(n_rgb_b{3});
+title('Normalized Blue Histogram');
+legend('Strawberry','Background');
+hold off
+
+%%
+% create offset Hue vector to see red values together on histogram
+offset = 0.1;
+offset_hue_s = size(hsv_s{1});
+for counter = 1:length(hsv_s{1})
+    if (hsv_s{1}(counter) + offset) <= 1
+        offset_hue_s(counter) = hsv_s{1}(counter) + offset;
+    else
+        offset_hue_s(counter) = hsv_s{1}(counter) - (1-offset);
+    end
+end
+
+offset_hue_b = size(hsv_b{1});
+for counter = 1:length(hsv_b{1})
+    if (hsv_b{1}(counter) + offset) <= 1
+        offset_hue_b(counter) = hsv_b{1}(counter) + offset;
+    else
+        offset_hue_b(counter) = hsv_b{1}(counter) - (1-offset);
+    end
+end
+%%
+% create histograms for HSV
+figure('Name','Hue');
+histogram(hsv_s{1});
+hold on;
+histogram(hsv_b{1});
+title('Hue Histogram');
+legend('Strawberry','Background');
+hold off
+
+figure('Name','Offset Hue');
+histogram(offset_hue_s);
+hold on;
+histogram(offset_hue_b);
+title('Offset Hue Histogram');
+legend('Strawberry','Background');
+hold off
+
+figure('Name','Saturation');
+histogram(hsv_s{2});
+hold on;
+histogram(hsv_b{2});
+title('Saturation Histogram');
+legend('Strawberry','Background');
+hold off
+
+figure('Name','Value');
+histogram(hsv_s{3});
+hold on;
+histogram(hsv_b{3});
+title('Value Histogram');
+legend('Strawberry','Background');
+hold off

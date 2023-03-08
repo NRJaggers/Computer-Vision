@@ -24,8 +24,7 @@ for k = 1:length(theFiles)
 end
 
 % go through images and resize them to min length and width
-% this ends up squishing some of the images, should ask if this is okay or
-% not
+% this ends up squishing some of the images,
 for i = 1:size(im,1)
     im{i} = imresize(im{i}, [183 259]);
     % use the following to display images one by one

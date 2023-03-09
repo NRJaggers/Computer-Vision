@@ -25,9 +25,11 @@ end
 
 %%
 % select size for K
-K = 4;
+K = 5;
 im_segmented_k = cell(length(im),1);
+k_centroid = cell(length(im),1);
 im_segmented_em = cell(length(im),1);
+
 
 %%
 % run the k means and EM algorithms for each image
@@ -35,14 +37,15 @@ for i = 1:length(im)
     % grab row and columns to reshape image
     [m,n]=size(im{i}(:,:,1));
     X=reshape(im{i},m*n,3);
+
     
     % create kmeans results
-    X_clustered=kmeans(double(X),K);
+    [X_clustered, k_centroid{i}] = kmeans(double(X),K);
     im_segmented_k{i}=reshape(X_clustered, m,n);
 
 %     % create EM results
 %     X_dist=fitgmdist(double(X),K);
-%     X_clustered=cluster(X_dist,double(X));
+%     X_clustered=cluster(X_dist,double(X)); 
 %     
 %     im_segmented_em{i}=reshape(X_clustered, m,n);
 
@@ -57,6 +60,26 @@ for i = 1:length(im_segmented_k)
     input("Next");
 end
 
+%%
+% show centroid colors and values
+for i = 1:length(k_centroid)
+    show_color(k_centroid{i}(1,:));
+    show_color(k_centroid{i}(2,:));
+    show_color(k_centroid{i}(3,:));
+    k_centroid{i}
+    input("Next");
+end
+
+%%
+% select a segment from kmeans and use it to create a binary image
+% use this binary image with bwconncomp to find strawberry bodies
+% CC = bwconncomp(BW)
+% use regionprops to find centers of bodies ...
+% stats = regionprops(CC,'Centroid')
+% centers = stats.Centroid
+% Can then use centroid to bound strawberries
+% or you can use technique described here maybe?:
+% https://www.mathworks.com/matlabcentral/answers/87597-rectangle-around-the-object-bounding-box
 %%
 % run the k means and EM algorithms for each image
 for i = 1:length(im)

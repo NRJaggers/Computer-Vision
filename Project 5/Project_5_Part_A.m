@@ -126,6 +126,8 @@ hold off
 n_rgb_s = cell(3,1);
 n_rgb_b = cell(3,1);
 
+% example
+% Normal_Red =  R/(R+G+B)
 n_rgb_s{1} = rgb_s{1}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
 n_rgb_s{2} = rgb_s{2}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
 n_rgb_s{3} = rgb_s{3}./(rgb_s{1} + rgb_s{2} + rgb_s{3});

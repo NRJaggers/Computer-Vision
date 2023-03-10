@@ -9,3 +9,5 @@ Project 2: Filtering noise out of images using various linear and nonlinear filt
 Project 3: Using normalized correlation and templates to perform template matching and find recurring segments/objects of interest in images.
 
 Project 4: Implement Harris corner detector to find corners in a checker board and go board. Implement a SIFT like feature extractor by creating 128 dimensional descriptors for keypoints found in an image. Then match these key points and show differences.
+
+Project 4: Color analysis of strawberries with RGB, normalized RGB, and HSV as well as segmetation of strawberries using K-means and EM algorithms.

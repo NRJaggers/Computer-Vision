@@ -12,7 +12,7 @@ clear;
 clc;
 
 %%
-% read in images form folder
+% read in images from folder
 dataDir = "Part B Data/";
 filePattern = fullfile(dataDir, "t*");
 theFiles = dir(filePattern);
@@ -63,23 +63,69 @@ end
 %%
 % show centroid colors and values
 for i = 1:length(k_centroid)
-    show_color(k_centroid{i}(1,:));
-    show_color(k_centroid{i}(2,:));
-    show_color(k_centroid{i}(3,:));
+    for segment = 1:length(k_centroid{i})
+        show_color(k_centroid{i}(segment,:));
+    end
     k_centroid{i}
     input("Next");
 end
 
+%% delete this test later
+for segment = 1:length(k_centroid{1})
+    show_color(k_centroid{1}(segment,:));
+end
+k_centroid{1}
+%%
+%row 1 in Km1 is red
+%can use if statment later, for now hard code
+redSegment = 0;
+
+% go through all the segments and pick out the best red
+% so far if there is no good red, redSeg stays 0
+for segment = 1:length(k_centroid{1})
+    if redSegment == 0
+        %if r is above certain threshold and bg are below threshold
+        if (k_centroid{1}(segment,1)>150)&&(k_centroid{1}(segment,2)<100)&&(k_centroid{1}(segment,3)<100)
+            redSegment = segment;
+        end
+    else
+        %if r is above certain threshold and bg are below threshold
+        if (k_centroid{1}(segment,1)>k_centroid{1}(redSegment,1))&&(k_centroid{1}(segment,2)<k_centroid{1}(redSegment,2))&&(k_centroid{1}(segment,3)<k_centroid{1}(redSegment,3))
+            redSegment = segment;
+        end
+    end 
+    
+end
+
+
 %%
 % select a segment from kmeans and use it to create a binary image
+strawberryBW = im_segmented_k{1} == redSegment;
+imshow(strawberryBW,[]);
+
+%%
 % use this binary image with bwconncomp to find strawberry bodies
 % CC = bwconncomp(BW)
+CC = bwconncomp(strawberryBW);
 % use regionprops to find centers of bodies ...
 % stats = regionprops(CC,'Centroid')
 % centers = stats.Centroid
+centers = regionprops(CC, 'Centroid');
+stats = regionprops(CC, "Area", 'BoundingBox','Centroid');
+bb = stats(find([stats.Area] > 80000));
+%%
 % Can then use centroid to bound strawberries
 % or you can use technique described here maybe?:
 % https://www.mathworks.com/matlabcentral/answers/87597-rectangle-around-the-object-bounding-box
+imshow(im{1});
+hold on
+for k = 1 : length(bb)
+  thisBB = bb(k).BoundingBox;
+  rectangle('Position', [thisBB(1),thisBB(2),thisBB(3),thisBB(4)],...
+  'EdgeColor','white','LineWidth',2 )
+  text(bb(k).Centroid(1),bb(k).Centroid(2), num2str(k), ...
+    'Color','white', 'FontWeight','bold','HorizontalAlignment','center');
+end
 %%
 % run the k means and EM algorithms for each image
 for i = 1:length(im)

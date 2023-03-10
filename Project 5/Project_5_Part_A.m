@@ -12,7 +12,7 @@ clear;
 clc;
 
 %%
-% read in images form folder
+% read in images from folder
 dataDir = "Part A Data/";
 filePattern = fullfile(dataDir, "s*");
 theFiles = dir(filePattern);

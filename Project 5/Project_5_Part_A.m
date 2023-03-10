@@ -12,7 +12,7 @@ clear;
 clc;
 
 %%
-% read in images from folder
+% read in images form folder
 dataDir = "Part A Data/";
 filePattern = fullfile(dataDir, "s*");
 theFiles = dir(filePattern);
@@ -97,27 +97,37 @@ end
 
 %%
 % create histograms for RGB
-figure('Name','Red');
-histogram(rgb_s{1});
+%figure('Name','Red');
+figure('Name','Histograms');
+subplot(3,1,1);
+histogram(rgb_s{1},'FaceColor','#E33D61');
 hold on;
-histogram(rgb_b{1});
+histogram(rgb_b{1},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Red Histogram');
+xlabel("Color Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Green');
-histogram(rgb_s{2});
+%figure('Name','Green');
+subplot(3,1,2);
+histogram(rgb_s{2},'FaceColor','#E33D61');
 hold on;
-histogram(rgb_b{2});
+histogram(rgb_b{2},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Green Histogram');
+xlabel("Color Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Blue');
-histogram(rgb_s{3});
+%figure('Name','Blue');
+subplot(3,1,3);
+histogram(rgb_s{3},'FaceColor','#E33D61');
 hold on;
-histogram(rgb_b{3});
+histogram(rgb_b{3},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Blue Histogram');
+xlabel("Color Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
@@ -126,8 +136,6 @@ hold off
 n_rgb_s = cell(3,1);
 n_rgb_b = cell(3,1);
 
-% example
-% Normal_Red =  R/(R+G+B)
 n_rgb_s{1} = rgb_s{1}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
 n_rgb_s{2} = rgb_s{2}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
 n_rgb_s{3} = rgb_s{3}./(rgb_s{1} + rgb_s{2} + rgb_s{3});
@@ -138,27 +146,37 @@ n_rgb_b{3} = rgb_b{3}./(rgb_b{1} + rgb_b{2} + rgb_b{3});
 
 %%
 % create histograms for normalized RGB
-figure('Name','Norm Red');
-histogram(n_rgb_s{1});
+%figure('Name','Norm Red');
+figure('Name','Normalized RGB');
+subplot(3,1,1);
+histogram(n_rgb_s{1},'FaceColor','#E33D61');
 hold on;
-histogram(n_rgb_b{1});
+histogram(n_rgb_b{1},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Normalized Red Histogram');
+xlabel("Color Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Norm Green');
-histogram(n_rgb_s{2});
+%figure('Name','Norm Green');
+subplot(3,1,2);
+histogram(n_rgb_s{2},'FaceColor','#E33D61');
 hold on;
-histogram(n_rgb_b{2});
+histogram(n_rgb_b{2},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Normalized Green Histogram');
+xlabel("Color Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Norm Blue');
-histogram(n_rgb_s{3});
+%figure('Name','Norm Blue');
+subplot(3,1,3);
+histogram(n_rgb_s{3},'FaceColor','#E33D61');
 hold on;
-histogram(n_rgb_b{3});
+histogram(n_rgb_b{3},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Normalized Blue Histogram');
+xlabel("Color Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
@@ -184,34 +202,47 @@ for counter = 1:length(hsv_b{1})
 end
 %%
 % create histograms for HSV
-figure('Name','Hue');
-histogram(hsv_s{1});
+%figure('Name','Hue');
+figure('Name','HSV Histogram');
+subplot(2,2,1);
+histogram(hsv_s{1},'FaceColor','#E33D61');
 hold on;
-histogram(hsv_b{1});
+histogram(hsv_b{1},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Hue Histogram');
+xlabel("Hue Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Offset Hue');
-histogram(offset_hue_s);
+%figure('Name','Offset Hue');
+subplot(2,2,2);
+histogram(offset_hue_s,'FaceColor','#E33D61');
 hold on;
-histogram(offset_hue_b);
+histogram(offset_hue_b,'FaceColor',[0.4660 0.6740 0.1880]);
 title('Offset Hue Histogram');
+xlabel("Hue Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Saturation');
-histogram(hsv_s{2});
+%figure('Name','Saturation');
+subplot(2,2,3);
+histogram(hsv_s{2},'FaceColor','#E33D61');
 hold on;
-histogram(hsv_b{2});
+histogram(hsv_b{2},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Saturation Histogram');
+xlabel("Saturation Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off
 
-figure('Name','Value');
-histogram(hsv_s{3});
+%figure('Name','Value');
+subplot(2,2,4);
+histogram(hsv_s{3},'FaceColor','#E33D61');
 hold on;
-histogram(hsv_b{3});
+histogram(hsv_b{3},'FaceColor',[0.4660 0.6740 0.1880]);
 title('Value Histogram');
+xlabel("Value");
+ylabel("Pixels");
 legend('Strawberry','Background');
 hold off

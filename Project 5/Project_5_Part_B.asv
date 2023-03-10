@@ -71,8 +71,6 @@ for i = 1:length(k_centroid)
 end
 
 %%
-%row 1 in Km1 is red
-%can use if statment later, for now hard code
 redSegment = zeros(6,1);
 
 for i = 1:length(k_centroid)
@@ -106,29 +104,13 @@ for i = 1:length(redSegment)
 end
 
 %%
-% use this binary image with bwconncomp to find strawberry bodies
-% CC = bwconncomp(BW)
-CC = bwconncomp(strawberryBW{i});
-% use regionprops to find centers of bodies ...
-% stats = regionprops(CC,'Centroid')
-% centers = stats.Centroid
-centers = regionprops(CC, 'Centroid');
-stats = regionprops(CC, "Area", 'BoundingBox','Centroid');
-bb = stats(find([stats.Area] > 80000));
-%%
-% Can then use centroid to bound strawberries
-% or you can use technique described here maybe?:
-% https://www.mathworks.com/matlabcentral/answers/87597-rectangle-around-the-object-bounding-box
-imshow(im{1});
-hold on
-for k = 1 : length(bb)
-  thisBB = bb(k).BoundingBox;
-  rectangle('Position', [thisBB(1),thisBB(2),thisBB(3),thisBB(4)],...
-  'EdgeColor','white','LineWidth',2 )
-  text(bb(k).Centroid(1),bb(k).Centroid(2), num2str(k), ...
-    'Color','white', 'FontWeight','bold','HorizontalAlignment','center');
+minsize = [80000 500 8000 500 100 100];
+for i = 1:length(strawberryBW)
+    box_objectBW(im{i},strawberryBW{i},minsize(i));
 end
+
 %%
+K = 3;
 % run the k means and EM algorithms for each image
 for i = 1:length(im)
     % grab row and columns to reshape image

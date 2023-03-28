@@ -1,4 +1,5 @@
-im = imread('easy2.jpg');
+impath = '../Images/easy1.jpg';
+im = imread(impath);
 hsvIm = rgb2hsv(im);
 % HSV values for the colors of a resistor:
 blackHSV = [0 0 0];
@@ -30,8 +31,8 @@ colorHSV = [blackHSV; brownHSV; redHSV; orangeHSV; yellowHSV; greenHSV; blueHSV;
 % colorHSV = [blackHSV; brownHSV; redHSV; whiteHSV];
 hsvToIdx([0.2604 0.5037 0.0690 0.0898;0.7459 0.6880 0.8502 0.5608;0.6522 0.6035 0.9385 0.8463], colorHSV);
 % hsvToIdx([0.2604;0.7459;0.6522], colorHSV);
-subplot(221), imshow(hsvIm), title("Regular");
-subplot(222), imshow(im), title("HSV");
+subplot(221), imshow(im), title("Regular");
+subplot(222), imshow(hsvIm), title("HSV");
 function inRange = inrange(x, value, error)
    % Returns true if x is in range of value by error or false otherwise
    inRange = (x >= value - (value * error)) & (x <= value + (value * error));
@@ -46,8 +47,8 @@ function idxRes = hsvToIdx(featVec, color)
            hueInRange = inrange(featVec(1, i), thisColor(1), errorRange);
            satInRange = inrange(featVec(2, i), thisColor(2), errorRange);
            % valInRange = inrange(featVec(i, 3), thisColor(3), errorRange);
-           disp(featVec(1, i))
-           disp(featVec(2,i))
+           %disp(featVec(1, i));
+           %disp(featVec(2,i));
            % disp(thisColor(1))
            if (hueInRange && satInRange)
                disp("Band: " + i)
